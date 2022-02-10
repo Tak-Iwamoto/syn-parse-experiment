@@ -1,8 +1,10 @@
 [package]
+edition = "2021"
 name = "syn-parse-experiment"
 version = "0.1.0"
-edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+async-trait = "0.1.52"
+syn = {version = "1.0.86", features = ["full", "extra-traits"]}
