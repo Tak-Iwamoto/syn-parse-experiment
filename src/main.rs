@@ -1,5 +1,7 @@
 use std::{fs::File, io::Read};
 
+use syn::ext::IdentExt;
+
 mod droid;
 
 fn main() {
@@ -10,10 +12,17 @@ fn main() {
 
     let syntax = syn::parse_file(&src).expect("Unable to parse file");
 
-    for (i, item) in syntax.items.iter().enumerate() {
-        println!("{}", i);
-        println!("{:?}", item);
+    for item in syntax.items.iter() {
+        if let syn::Item::Struct(st_item) = &item {
+            for field in &st_item.fields {
+                let ident = field.ident.clone().unwrap().unraw().to_string();
+                println!("{}", &ident);
+                if let syn::Type::Path(ty_path) = &field.ty {
+                    let path_segment = ty_path.path.segments.first().unwrap();
+                    let ident = path_segment.ident.unraw().to_string();
+                    println!("{}", ident);
+                }
+            }
+        }
     }
-    // Debug impl is available if Syn is built with "extra-traits" feature.
-    // println!("{:#?}", syntax);
 }
