@@ -24,5 +24,26 @@ fn main() {
                 }
             }
         }
+
+        if let syn::Item::Impl(impl_item) = &item {
+            if let syn::Type::Path(ty_path) = &*impl_item.self_ty {
+                let impl_struct_name = ty_path
+                    .path
+                    .segments
+                    .first()
+                    .unwrap()
+                    .ident
+                    .unraw()
+                    .to_string();
+                println!("{}", impl_struct_name);
+            }
+
+            for item in &impl_item.items {
+                if let syn::ImplItem::Method(method) = item {
+                    let method_name = method.sig.ident.unraw().to_string();
+                    println!("method_name: {}", method_name);
+                }
+            }
+        }
     }
 }
